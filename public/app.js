@@ -261,7 +261,7 @@ async function handleIdentify() {
     });
     state.studentId = result.studentId;
     setStatus('', '');
-    await showGroupSize();
+    await refreshSession();
   } catch (err) {
     setStatus(err.message, 'error');
   }
