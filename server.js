@@ -11,6 +11,9 @@ const { runSeed } = require('./db/seed');
 let initPromise;
 
 async function ensureDb() {
+  if (!process.env.DATABASE_URL) {
+    throw new Error('DATABASE_URL is missing');
+  }
   if (!initPromise) {
     initPromise = (async () => {
       await runMigrations(pool);
@@ -24,7 +27,10 @@ function buildApp() {
   const app = Fastify({ logger: true, trustProxy: true });
   app.decorate('db', pool);
 
-  app.addHook('onRequest', async () => {
+  app.addHook('onRequest', async (req) => {
+    if (!req.url.startsWith('/api/')) {
+      return;
+    }
     await ensureDb();
   });
 
