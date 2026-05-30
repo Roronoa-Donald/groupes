@@ -58,7 +58,7 @@ function setSection(id) {
 
 function setPolling(active) {
   if (active && !state.pollingId) {
-    state.pollingId = setInterval(refreshSession, 5000);
+    state.pollingId = setInterval(refreshSession, 20000);
   }
   if (!active && state.pollingId) {
     clearInterval(state.pollingId);

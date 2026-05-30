@@ -27,6 +27,7 @@ async function ensureDb(log) {
       await runSeed(pool);
       logger.info('DB init done');
     })().catch((err) => {
+      initPromise = null;
       logger.error({ err: err.message }, 'DB init failed');
       throw err;
     });

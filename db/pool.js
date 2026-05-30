@@ -11,8 +11,10 @@ const useSsl = connectionString && !connectionString.includes('localhost');
 const pool = new Pool({
   connectionString: connectionString || undefined,
   ssl: useSsl ? { rejectUnauthorized: false } : false,
-  connectionTimeoutMillis: 8000,
+  connectionTimeoutMillis: 5000,
   query_timeout: 8000,
+  idleTimeoutMillis: 10000,
+  max: 5,
 });
 
 pool.on('connect', () => {
