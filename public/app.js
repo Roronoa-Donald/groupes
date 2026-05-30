@@ -17,6 +17,8 @@ const sections = [
   'step-dashboard',
 ];
 
+const API_TIMEOUT_MS = 8000;
+
 function $(id) {
   return document.getElementById(id);
 }
@@ -64,8 +66,23 @@ function setPolling(active) {
   }
 }
 
+async function fetchWithTimeout(url, options) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
 async function apiGet(url) {
-  const response = await fetch(url, { headers: { Accept: 'application/json' } });
+  let response;
+  try {
+    response = await fetchWithTimeout(url, { headers: { Accept: 'application/json' } });
+  } catch (err) {
+    throw new Error('API timeout. Verifie DATABASE_URL sur Vercel.');
+  }
   const data = await response.json();
   if (!response.ok) {
     throw new Error(data.error || 'Request failed');
@@ -74,11 +91,16 @@ async function apiGet(url) {
 }
 
 async function apiPost(url, payload) {
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-    body: JSON.stringify(payload || {}),
-  });
+  let response;
+  try {
+    response = await fetchWithTimeout(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify(payload || {}),
+    });
+  } catch (err) {
+    throw new Error('API timeout. Verifie DATABASE_URL sur Vercel.');
+  }
   const data = await response.json();
   if (!response.ok) {
     throw new Error(data.error || 'Request failed');

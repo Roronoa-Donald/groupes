@@ -31,6 +31,9 @@ function buildApp() {
     if (!req.url.startsWith('/api/')) {
       return;
     }
+    if (req.url.startsWith('/api/ping')) {
+      return;
+    }
     await ensureDb();
   });
 
@@ -42,6 +45,7 @@ function buildApp() {
   app.register(require('./routes/student'), { prefix: '/api/student' });
   app.register(require('./routes/admin'), { prefix: '/api/admin' });
 
+  app.get('/api/ping', async () => ({ ok: true, hasDb: Boolean(process.env.DATABASE_URL) }));
   app.get('/health', async () => ({ ok: true }));
 
   return app;
