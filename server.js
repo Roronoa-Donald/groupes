@@ -10,15 +10,26 @@ const { runSeed } = require('./db/seed');
 
 let initPromise;
 
-async function ensureDb() {
+function getLog(log) {
+  return log || console;
+}
+
+async function ensureDb(log) {
+  const logger = getLog(log);
   if (!process.env.DATABASE_URL) {
+    logger.error('DATABASE_URL is missing');
     throw new Error('DATABASE_URL is missing');
   }
   if (!initPromise) {
+    logger.info('DB init start');
     initPromise = (async () => {
       await runMigrations(pool);
       await runSeed(pool);
-    })();
+      logger.info('DB init done');
+    })().catch((err) => {
+      logger.error({ err: err.message }, 'DB init failed');
+      throw err;
+    });
   }
   return initPromise;
 }
@@ -34,7 +45,7 @@ function buildApp() {
     if (req.url.startsWith('/api/ping')) {
       return;
     }
-    await ensureDb();
+    await ensureDb(app.log);
   });
 
   app.register(staticPlugin, {

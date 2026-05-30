@@ -15,4 +15,12 @@ const pool = new Pool({
   query_timeout: 8000,
 });
 
+pool.on('connect', () => {
+  console.info('PG pool connected');
+});
+
+pool.on('error', (err) => {
+  console.error('PG pool error', err && err.message ? err.message : err);
+});
+
 module.exports = { pool };

@@ -330,6 +330,7 @@ select {
 ];
 
 async function runSeed(pool) {
+  console.info('Seed start');
   const studentCount = await pool.query('SELECT COUNT(*) FROM grp_students');
   if (Number(studentCount.rows[0].count) === 0) {
     const placeholders = students.map((_, i) => `($${i + 1})`).join(',');
@@ -337,6 +338,9 @@ async function runSeed(pool) {
       `INSERT INTO grp_students (full_name) VALUES ${placeholders}`,
       students
     );
+    console.info(`Seed students inserted: ${students.length}`);
+  } else {
+    console.info(`Seed students skipped (count=${studentCount.rows[0].count})`);
   }
 
   const subjectCount = await pool.query('SELECT COUNT(*) FROM grp_subjects');
@@ -354,7 +358,11 @@ async function runSeed(pool) {
       `INSERT INTO grp_subjects (title, description, css) VALUES ${placeholders}`,
       values
     );
+    console.info(`Seed subjects inserted: ${subjects.length}`);
+  } else {
+    console.info(`Seed subjects skipped (count=${subjectCount.rows[0].count})`);
   }
+  console.info('Seed done');
 }
 
 module.exports = { runSeed };
