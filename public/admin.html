@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin - Groupes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Sora:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="backdrop-glow"></div>
+    <div class="container">
+      <header class="app-header">
+        <div>
+          <h1>Dashboard admin</h1>
+          <p class="subtitle">Controle des groupes et des sujets.</p>
+        </div>
+        <div class="tag">Admin</div>
+      </header>
+
+      <div id="admin-status" class="status-bar hidden"></div>
+
+      <section id="admin-login" class="panel">
+        <h2>Connexion</h2>
+        <label for="admin-password">Mot de passe</label>
+        <input id="admin-password" type="password" placeholder="ADMIN_PASSWORD" />
+        <div class="dashboard-row" style="margin-top: 14px;">
+          <button id="admin-login-btn" class="btn-primary">Entrer</button>
+        </div>
+      </section>
+
+      <section id="admin-data" class="panel hidden">
+        <h2>Groupes</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Members</th>
+              <th>Sujet</th>
+              <th>Statut</th>
+              <th>Creation</th>
+            </tr>
+          </thead>
+          <tbody id="group-table"></tbody>
+        </table>
+
+        <h2 style="margin-top: 22px;">Etudiants sans groupe</h2>
+        <div id="ungrouped" class="list"></div>
+      </section>
+    </div>
+
+    <script src="/admin.js" defer></script>
+  </body>
+</html>

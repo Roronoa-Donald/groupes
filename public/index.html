@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Plateforme de groupes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Sora:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="backdrop-glow"></div>
+    <div class="container">
+      <header class="app-header">
+        <div>
+          <h1>Plateforme de groupes</h1>
+          <p class="subtitle">Binomes et triades, sans compte, avec verrous.</p>
+        </div>
+        <div class="tag">React - Travail de groupe</div>
+      </header>
+
+      <div id="status" class="status-bar hidden"></div>
+
+      <main class="grid">
+        <section id="step-identify" class="panel hidden">
+          <h2>Etape 1 - Identification</h2>
+          <p>Choisissez votre nom pour demarrer.</p>
+          <label for="student-select">Etudiant</label>
+          <select id="student-select"></select>
+          <div class="dashboard-row" style="margin-top: 14px;">
+            <button id="identify-btn" class="btn-primary">C'est moi</button>
+          </div>
+        </section>
+
+        <section id="step-size" class="panel hidden">
+          <h2>Etape 2 - Taille du groupe</h2>
+          <p>Selectionnez un groupe de 2 ou 3 selon le quota disponible.</p>
+          <div class="radio-row">
+            <label>
+              <input type="radio" name="group-size" value="2" checked />
+              Groupe de 2
+            </label>
+            <label>
+              <input id="size-3" type="radio" name="group-size" value="3" />
+              Groupe de 3
+              <span id="triad-note" class="pill"></span>
+            </label>
+          </div>
+          <div class="dashboard-row" style="margin-top: 10px;">
+            <button id="size-continue" class="btn-primary">Continuer</button>
+          </div>
+        </section>
+
+        <section id="step-partner" class="panel hidden">
+          <h2>Etape 3 - Choix du binome</h2>
+          <p>Choisissez votre partenaire. Il disparaitra des listes.</p>
+          <label for="partner-select">Binome</label>
+          <select id="partner-select"></select>
+          <div class="dashboard-row" style="margin-top: 14px;">
+            <button id="partner-btn" class="btn-primary">Valider le binome</button>
+          </div>
+        </section>
+
+        <section id="step-third" class="panel hidden">
+          <h2>Etape 4 - Choix du troisieme</h2>
+          <p>Choisissez le troisieme membre du groupe.</p>
+          <label for="third-select">Troisieme</label>
+          <select id="third-select"></select>
+          <div class="dashboard-row" style="margin-top: 14px;">
+            <button id="third-btn" class="btn-primary">Valider le troisieme</button>
+          </div>
+        </section>
+
+        <section id="step-subject" class="panel hidden">
+          <h2>Etape 5 - Choix du sujet</h2>
+          <p>Un seul sujet visible. Naviguez et validez votre choix.</p>
+          <div class="carousel" style="margin-top: 14px;">
+            <button id="subject-prev" class="btn-secondary">◀</button>
+            <div class="carousel-card">
+              <div class="dashboard-row" style="justify-content: space-between;">
+                <h3 id="subject-title"></h3>
+                <span id="subject-index" class="pill"></span>
+              </div>
+              <p id="subject-desc"></p>
+              <div class="code-box" id="subject-css"></div>
+            </div>
+            <button id="subject-next" class="btn-secondary">▶</button>
+          </div>
+          <div class="dashboard-row" style="margin-top: 14px;">
+            <button id="subject-choose" class="btn-primary">Choisir ce sujet</button>
+          </div>
+        </section>
+
+        <section id="step-dashboard" class="panel hidden">
+          <h2>Dashboard etudiant</h2>
+          <div class="grid two">
+            <div class="panel">
+              <h3>Infos</h3>
+              <div class="dashboard-row">
+                <span class="pill">Nom</span>
+                <strong id="dash-name"></strong>
+              </div>
+              <div class="dashboard-row" style="margin-top: 8px;">
+                <span class="pill">Statut</span>
+                <strong id="dash-status"></strong>
+              </div>
+              <div class="dashboard-row" style="margin-top: 8px;">
+                <span class="pill">Taille</span>
+                <strong id="dash-size"></strong>
+              </div>
+            </div>
+            <div class="panel">
+              <h3>Groupe</h3>
+              <div id="dash-members"></div>
+              <div style="margin-top: 10px;">
+                <span class="pill">Sujet</span>
+                <strong id="dash-subject"></strong>
+              </div>
+              <p id="dash-subject-note" class="subtitle" style="margin-top: 6px;"></p>
+            </div>
+          </div>
+          <div id="dash-actions" class="dashboard-row" style="margin-top: 16px;"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
+    <script src="/app.js" defer></script>
+  </body>
+</html>
