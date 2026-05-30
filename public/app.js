@@ -36,6 +36,17 @@ function setStatus(message, type) {
   status.textContent = message;
 }
 
+function setIdentity(student) {
+  const banner = $('identity-banner');
+  if (!student) {
+    banner.classList.add('hidden');
+    banner.textContent = '';
+    return;
+  }
+  banner.classList.remove('hidden');
+  banner.textContent = `Identifie: ${student.fullName}`;
+}
+
 function setSection(id) {
   sections.forEach((sectionId) => {
     $(sectionId).classList.toggle('hidden', sectionId !== id);
@@ -219,12 +230,14 @@ async function refreshSession() {
   try {
     const data = await apiPost('/api/student/me', { fingerprint: state.fingerprint });
     if (!data.found) {
+      setIdentity(null);
       state.studentId = null;
       state.groupId = null;
       await showIdentify();
       return;
     }
 
+    setIdentity(data.student);
     state.studentId = data.student.id;
     if (data.group) {
       state.groupId = data.group.id;
