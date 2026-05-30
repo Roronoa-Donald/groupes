@@ -42,6 +42,10 @@ function buildApp() {
     prefix: '/',
   });
 
+  app.get('/_auth/admin', async (req, reply) => {
+    return reply.sendFile('admin.html');
+  });
+
   app.register(require('./routes/student'), { prefix: '/api/student' });
   app.register(require('./routes/admin'), { prefix: '/api/admin' });
 
