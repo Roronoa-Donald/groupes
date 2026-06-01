@@ -17,7 +17,7 @@ const sections = [
   'step-dashboard',
 ];
 
-const API_TIMEOUT_MS = 8000;
+const API_TIMEOUT_MS = 16000;
 
 function $(id) {
   return document.getElementById(id);
