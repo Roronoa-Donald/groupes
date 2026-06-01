@@ -12,15 +12,15 @@ module.exports = async (req, res) => {
 
   console.log(`[api] 🚩 START ${req.method} ${req.url} id=${reqId}`);
 
-  // WATCHDOG: Force une réponse si Fastify met plus de 8 secondes
+  // WATCHDOG: Force une réponse si Fastify met plus de 16 secondes
   // pour éviter le 504 Gateway Timeout de Vercel
   const watchdog = setTimeout(() => {
-    console.error(`[api] 🚨 WATCHDOG TRIGGERED: Request timed out after 8s id=${reqId}`);
+    console.error(`[api] 🚨 WATCHDOG TRIGGERED: Request timed out after 16s id=${reqId}`);
     if (!res.writableEnded) {
       res.statusCode = 500;
       res.end('Internal Server Error: API Gateway Timeout (Watchdog)');
     }
-  }, 8000);
+  }, 16000);
 
   res.on('finish', () => {
     clearTimeout(watchdog);
