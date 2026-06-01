@@ -5,50 +5,45 @@ const buildApp = require('../server');
 
 const app = buildApp();
 const handler = serverless(app);
-let readyPromise;
-
-async function ensureReady() {
-  if (!readyPromise) {
-    const start = Date.now();
-    console.log('[api] fastify ready start');
-    readyPromise = app
-      .ready()
-      .then(() => {
-        console.log(`[api] fastify ready done ${Date.now() - start}ms`);
-      })
-      .catch((err) => {
-        const message = err && err.message ? err.message : 'unknown error';
-        console.log(`[api] fastify ready error ${message}`);
-        throw err;
-      });
-  }
-  return readyPromise;
-}
 
 module.exports = async (req, res) => {
   const started = Date.now();
-  const reqId =
-    req.headers['x-vercel-id'] ||
-    req.headers['x-request-id'] ||
-    `local-${started}-${Math.random().toString(16).slice(2, 8)}`;
+  const reqId = req.headers['x-vercel-id'] || `local-${started}`;
 
-  console.log(`[api] start ${req.method} ${req.url} id=${reqId}`);
-  const slowTimer = setTimeout(() => {
-    console.log(`[api] slow >10s ${req.method} ${req.url} id=${reqId}`);
-  }, 10000);
+  console.log(`[api] 🚩 START ${req.method} ${req.url} id=${reqId}`);
+
+  // WATCHDOG: Force une réponse si Fastify met plus de 8 secondes
+  // pour éviter le 504 Gateway Timeout de Vercel
+  const watchdog = setTimeout(() => {
+    console.error(`[api] 🚨 WATCHDOG TRIGGERED: Request timed out after 8s id=${reqId}`);
+    if (!res.writableEnded) {
+      res.statusCode = 500;
+      res.end('Internal Server Error: API Gateway Timeout (Watchdog)');
+    }
+  }, 8000);
 
   res.on('finish', () => {
-    clearTimeout(slowTimer);
+    clearTimeout(watchdog);
     const ms = Date.now() - started;
-    console.log(`[api] done ${req.method} ${req.url} ${res.statusCode} ${ms}ms id=${reqId}`);
+    console.log(`[api] ✅ DONE ${req.method} ${req.url} ${res.statusCode} ${ms}ms id=${reqId}`);
   });
+
   res.on('close', () => {
-    clearTimeout(slowTimer);
+    clearTimeout(watchdog);
     if (!res.writableEnded) {
-      const ms = Date.now() - started;
-      console.log(`[api] closed ${req.method} ${req.url} ${ms}ms id=${reqId}`);
+      console.log(`[api] ❌ CLOSED ${req.method} ${req.url} id=${reqId}`);
     }
   });
 
-  return handler(req, res);
+  try {
+    console.log(`[api] ⚙️ Calling handler id=${reqId}`);
+    return await handler(req, res);
+  } catch (err) {
+    clearTimeout(watchdog);
+    console.error(`[api] 💥 HANDLER ERROR id=${reqId}:`, err);
+    if (!res.writableEnded) {
+      res.statusCode = 500;
+      res.end('Internal Server Error');
+    }
+  }
 };
