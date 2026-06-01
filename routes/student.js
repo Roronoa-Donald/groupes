@@ -540,6 +540,16 @@ module.exports = async function studentRoutes(app) {
       return reply.code(404).send({ error: 'Subject not found' });
     }
 
+    const subjectTaken = await dbQuery(
+      'group-subject-taken',
+      'SELECT id FROM grp_groups WHERE subject_id = $1',
+      [subjectId]
+    );
+    if (subjectTaken.rows[0]) {
+      app.log.warn({ route: 'student/group/subject', subjectId }, 'subject already taken');
+      return reply.code(409).send({ error: 'Subject already taken' });
+    }
+
     await dbQuery(
       'group-subject-update',
       'UPDATE grp_groups SET subject_id = $1 WHERE id = $2',
@@ -557,7 +567,7 @@ module.exports = async function studentRoutes(app) {
        FROM grp_subjects
        WHERE id NOT IN (
          SELECT subject_id FROM grp_groups
-         WHERE status = 'confirmed' AND subject_id IS NOT NULL
+         WHERE subject_id IS NOT NULL
        )
        ORDER BY id`
     );

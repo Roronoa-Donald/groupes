@@ -6,7 +6,8 @@
   "main": "server.js",
   "scripts": {
     "dev": "node server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "reset": "node db/reset.js"
   },
   "dependencies": {
     "@fastify/static": "^7.0.4",

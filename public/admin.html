@@ -35,7 +35,39 @@
       </section>
 
       <section id="admin-data" class="panel hidden">
-        <h2>Groupes</h2>
+        <h2>Creer un groupe</h2>
+        <div class="grid two">
+          <div>
+            <label for="create-size">Taille du groupe</label>
+            <select id="create-size">
+              <option value="2">2 etudiants</option>
+              <option value="3">3 etudiants</option>
+            </select>
+          </div>
+          <div>
+            <label for="create-subject">Sujet (optionnel)</label>
+            <select id="create-subject"></select>
+          </div>
+          <div>
+            <label for="create-leader">Leader</label>
+            <select id="create-leader"></select>
+          </div>
+          <div>
+            <label for="create-second">Second</label>
+            <select id="create-second"></select>
+          </div>
+          <div id="create-third-wrap" class="hidden">
+            <label for="create-third">Troisieme</label>
+            <select id="create-third"></select>
+          </div>
+        </div>
+        <div class="dashboard-row" style="margin-top: 12px;">
+          <button id="create-group-btn" class="btn-primary" type="button">
+            Creer le groupe
+          </button>
+        </div>
+
+        <h2 style="margin-top: 22px;">Groupes</h2>
         <table class="table">
           <thead>
             <tr>
@@ -50,6 +82,18 @@
 
         <h2 style="margin-top: 22px;">Etudiants sans groupe</h2>
         <div id="ungrouped" class="list"></div>
+
+        <h2 style="margin-top: 22px;">Reinitialiser une session</h2>
+        <label for="session-select">Session active</label>
+        <select id="session-select"></select>
+        <div class="dashboard-row" style="margin-top: 12px;">
+          <button id="session-reset-btn" class="btn-danger" type="button">
+            Reinitialiser fingerprint et IP
+          </button>
+        </div>
+        <p class="subtitle" style="margin-top: 6px;">
+          Utilisez ceci en cas d'usurpation pour forcer un nouvel enregistrement.
+        </p>
       </section>
     </div>
 

@@ -1,7 +1,10 @@
 'use strict';
 
-require('dotenv').config();
 const path = require('path');
+require('dotenv').config({
+  path: path.join(__dirname, '.env'),
+  override: process.env.NODE_ENV !== 'production',
+});
 const Fastify = require('fastify');
 const staticPlugin = require('@fastify/static');
 const { pool } = require('./db/pool');

@@ -238,6 +238,22 @@ button:disabled {
   margin-top: 12px;
 }
 
+.subject-controls {
+  display: grid;
+  gap: 8px;
+}
+
+.subject-controls .subject-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.subject-controls select {
+  min-width: 220px;
+}
+
 .table th,
 .table td {
   text-align: left;
